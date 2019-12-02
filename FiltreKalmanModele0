@@ -1,0 +1,45 @@
+function [x1,P1,K1] = FiltreKalmanModele0(A,H,Q,R, P0, x0, y1)
+%Estime l'état k+1 (x1) en fonction de l'état k (x0) et des mesures à l'état (k+1)
+
+
+%PREDICTION _ Définitions:    renvoie l'état "a priori" càd en prenant en compte 
+%                               seulement le modèle mathématique:
+%
+%   -   A[1x1]:          Matrice qui relie l'état précédent k à l'état actuel k+1
+%
+%   -   xpriori[1x1]:    L'estimation à l'instant k selon le modèle mathématique
+%
+%   -   Ppriori[1x1]:    Matrice d'estimation "a priori" de la covariance de l'erreur
+%
+%   -   Q[1x1]:          Matrice de covariance du bruit du processus
+
+%PREDICTION _ Equations:
+    xpriori = A*x0;
+    Ppriori = A*P0*transpose(A) + Q;
+    
+    
+
+%MISE A JOUR _ Définitions:    permet de mettre à jour l'état k+1 en prenant en compte
+%                               les mesures:
+%
+%   -   K1[1x3], le gain de Kalman:
+%                        proche de 1/H si les mesures sont fiables
+%                        proche de 1/R si le modèle mathématique est fiable
+%
+%   -   P1[1x1]:         Matrice d'estimation a posteriori de la covariance de l'erreur
+%
+%   -   x1[1x1]:         L'état k+1 càd "a posteriori", après prise en compte du filtrage
+%
+%   -   y1[3x1]:         Mesures des capteurs à l'instant (k+1)
+%
+%   -   H[3x1]:          Matrice qui relie l'état (k) à la mesure (k+1)
+%
+%   -   R[1x1]:          Matrice de covariance du bruit de mesure
+  
+%MISE A JOUR _ Equations
+    K1 = (Ppriori*transpose(H)) / (H*Ppriori*transpose(H) + R);
+    P1 = (eye(3) - K1*H) * Ppriori;
+    x1 = xpriori + K1*(y1 - H*xpriori);
+    
+    
+end
