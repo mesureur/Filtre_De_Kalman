@@ -26,19 +26,19 @@ function [x1,P1,K1] = FiltreKalmanModele0(A,H,Q,R, P0, x0, y1)
 %                        proche de 1/H si les mesures sont fiables
 %                        proche de 1/R si le modèle mathématique est fiable
 %
-%   -   P1[1x1]:         Matrice d'estimation a posteriori de la covariance de l'erreur
+%   -   P1[1x1]:         Matrice d'estimation "a posteriori" de la covariance de l'erreur
 %
 %   -   x1[1x1]:         L'état k+1 càd "a posteriori", après prise en compte du filtrage
 %
-%   -   y1[3x1]:         Mesures des capteurs à l'instant (k+1)
+%   -   y1[3x1]:         Mesures des capteurs à l'instant (k)
 %
-%   -   H[3x1]:          Matrice qui relie l'état (k) à la mesure (k+1)
+%   -   H[3x1]:          Matrice qui relie l'état (k) à la mesure (k)
 %
-%   -   R[1x1]:          Matrice de covariance du bruit de mesure
+%   -   R[3x3]:          Matrice de covariance du bruit de mesure
   
 %MISE A JOUR _ Equations
-    K1 = (Ppriori*transpose(H)) / (H*Ppriori*transpose(H) + R);
-    P1 = (eye(3) - K1*H) * Ppriori;
+    K1 = (Ppriori*transpose(H)) / (H*Ppriori*transpose(H) + R );
+    P1 = (eye(1) - K1*H) * Ppriori;
     x1 = xpriori + K1*(y1 - H*xpriori);
     
     
