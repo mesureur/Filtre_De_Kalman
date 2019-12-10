@@ -1,5 +1,7 @@
-load('Data2.mat')
+clear all;
+close all;
 
+load('Data2.mat')
 taille=size(CAN_Prius__vehicle_speed_7e0, 1);
 
 %On supprimme la dernière ligne de "CAN_Prius__vehicle_speed_7e0"
@@ -28,5 +30,19 @@ end
 %expérimentales. Les résultats du filtrage et notamment le gain de Kalman K doivent
 %être affichés pour vérifier le bon fonctionnement du filtre ;
 
+%Matrice de transition
+A=eye(1);
 
-A=eye(3);
+%Matrice d'Observation
+H=1;
+
+%Matrice diagonale avec les différentes variances des bruits des capteurs
+variance=var(S_Sensoren_II_v1_0__DataFrame1__v(:,2));
+variance0=var(CAN_Prius__vehicle_speed_7e0(:,2));
+variance2=var(CAN_Prius__vehicle_speed_7e2(:,2));
+diagonale=[variance variance0 variance2];
+R=diag(diagonale);
+
+%Variance maximale de l'erreur autorisée sur la modélisation de la vitesse
+%Différentes valeurs à tester
+Q=1;
